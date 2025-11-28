@@ -20,6 +20,8 @@ namespace Documents_Toshmatov
     /// </summary>
     public partial class MainWindow : Window
     {
+        internal static object init;
+
         public MainWindow()
         {
             InitializeComponent();
