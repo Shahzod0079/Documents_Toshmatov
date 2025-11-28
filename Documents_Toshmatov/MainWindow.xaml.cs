@@ -29,8 +29,8 @@ namespace Documents_Toshmatov
                 frame.Navigate(new Main()); 
             else if (_pages == pages.add) 
             {
-                MessageBox.Show("Страница добавления пока не реализована");
-                // frame.Navigate(new Add());
+                frame.Navigate(new Add());
+
             }
         }
     }

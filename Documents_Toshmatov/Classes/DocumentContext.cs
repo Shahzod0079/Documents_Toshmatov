@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Windows;
 using Documents_Toshmatov.Interfaces;
 using Documents_Toshmatov.Model;
 
@@ -10,15 +11,15 @@ namespace Documents_Toshmatov.Classes
     {
         public DocumentContext() { }
 
-        public DocumentContext(int id, string src, string name, string user, int id_document, DateTime date, int status, string vector)
-            : base(id, src, name, user, id_document, date, status, vector)
+        public DocumentContext(int id, string src, string name, string user, string id_document, DateTime date, int status, string vector)
+            : base(id, src, name, user, id_document, date, status, vector)  // ИЗМЕНИТЬ ТИП id_document
         {
         }
 
         /// <summary> Метод сохранения </summary>
-        public void Save(bool Update = false)
+        public void Save(bool update = false)
         {
-            if (Update)
+            if (update)
             {
                 OleDbConnection connection = Common.DBConnect.Connection();
                 Common.DBConnect.Query("UPDATE [Документы] " +
@@ -26,7 +27,7 @@ namespace Documents_Toshmatov.Classes
                 $"[Изображение] = '{this.src}', " +
                 $"[Наименование] = '{this.name}', " +
                 $"[Ответственный] = '{this.user}', " +
-                $"[Код документа] = '{this.id_document}', " +
+                $"[Код документа] = '{this.id_document}', " +  // УБРАТЬ Parse, т.к. теперь string
                 $"[Дата поступления] = '{this.date.ToString("dd.MM.yyyy")}', " +
                 $"[Статус] = {this.status}, " +
                 $"[Направление] = '{this.vector}' " +
@@ -49,7 +50,7 @@ namespace Documents_Toshmatov.Classes
                 $"'{this.src}', " +
                 $"'{this.name}', " +
                 $"'{this.user}', " +
-                $"'{this.id_document}', " +
+                $"'{this.id_document}', " +  // УБРАТЬ Parse, т.к. теперь string
                 $"'{this.date.ToString("dd.MM.yyyy")}', " +
                 $"{this.status}, " +
                 $"'{this.vector}')", connection);
@@ -67,22 +68,39 @@ namespace Documents_Toshmatov.Classes
             {
                 OleDbDataReader dataDocuments = Common.DBConnect.Query("SELECT * FROM [Документы]", connection);
 
-                while (dataDocuments.Read())
-                {
-                    DocumentContext newDocument = new DocumentContext();
-                    newDocument.id = dataDocuments.GetInt32(0);
-                    newDocument.src = dataDocuments.GetString(1);
-                    newDocument.name = dataDocuments.GetString(2);
-                    newDocument.user = dataDocuments.GetString(3);
-                    newDocument.id_document = dataDocuments.GetInt32(4);
-                    newDocument.date = dataDocuments.GetDateTime(5);
-                    newDocument.status = dataDocuments.GetInt32(6);
-                    newDocument.vector = dataDocuments.GetString(7);
+                // Получаем количество столбцов
+                int fieldCount = dataDocuments.FieldCount;
+                MessageBox.Show($"Количество столбцов в таблице: {fieldCount}");
 
-                    allDocuments.Add(newDocument);
+                if (dataDocuments.HasRows)
+                {
+                    while (dataDocuments.Read())
+                    {
+                        DocumentContext newDocument = new DocumentContext();
+
+                        // Заполняем только те поля, для которых есть столбцы
+                        if (fieldCount > 0) newDocument.id = dataDocuments.IsDBNull(0) ? 0 : dataDocuments.GetInt32(0);
+                        if (fieldCount > 1) newDocument.src = dataDocuments.IsDBNull(1) ? "" : dataDocuments.GetString(1);
+                        if (fieldCount > 2) newDocument.name = dataDocuments.IsDBNull(2) ? "" : dataDocuments.GetString(2);
+                        if (fieldCount > 3) newDocument.user = dataDocuments.IsDBNull(3) ? "" : dataDocuments.GetString(3);
+                        if (fieldCount > 4) newDocument.id_document = dataDocuments.IsDBNull(4) ? "" : dataDocuments.GetString(4);
+                        if (fieldCount > 5) newDocument.date = dataDocuments.IsDBNull(5) ? DateTime.Now : dataDocuments.GetDateTime(5);
+                        if (fieldCount > 6) newDocument.status = dataDocuments.IsDBNull(6) ? 0 : dataDocuments.GetInt32(6);
+                        if (fieldCount > 7) newDocument.vector = dataDocuments.IsDBNull(7) ? "" : dataDocuments.GetString(7);
+
+                        allDocuments.Add(newDocument);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Таблица пустая");
                 }
 
                 dataDocuments.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}\nПодробности: {ex.StackTrace}");
             }
             finally
             {
@@ -91,7 +109,6 @@ namespace Documents_Toshmatov.Classes
 
             return allDocuments;
         }
-
         public void Delete()
         {
             OleDbConnection connection = Common.DBConnect.Connection();
