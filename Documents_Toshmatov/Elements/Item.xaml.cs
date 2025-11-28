@@ -17,13 +17,11 @@ namespace Documents_Toshmatov.Elements
         {
             InitializeComponent();
 
-            // Выводим изображение
             if (!string.IsNullOrEmpty(document.src))
             {
                 img.Source = new BitmapImage(new Uri(document.src, UriKind.RelativeOrAbsolute));
             }
 
-            // Выводим данные
             lName.Text = document.name;
             lUser.Text = $"Ответственный: {document.user}";
             lCode.Text = $"Код документа: {document.id_document}";
@@ -31,14 +29,12 @@ namespace Documents_Toshmatov.Elements
             lStatus.Text = document.status == 0 ? "Статус: Входящий" : "Статус: Исходящий";
             lDirect.Text = "Направление: " + document.vector;
 
-            // Сохраняем документ для изменения или удаления
             this.Document = document;
         }
 
         /// <summary> Редактирование документа </summary>
         private void EditDocument_Click(object sender, RoutedEventArgs e)
         {
-            // Временная заглушка - нужно реализовать навигацию
             MessageBox.Show($"Редактирование документа: {Document.name}");
             /*
             // Открываем страницу изменения передавая документ
@@ -56,7 +52,6 @@ namespace Documents_Toshmatov.Elements
             {
                 try
                 {
-                    // Удаляем документ
                     Document.Delete();
                     MessageBox.Show("Документ успешно удален");
 
