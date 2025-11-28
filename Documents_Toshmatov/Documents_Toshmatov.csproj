@@ -64,7 +64,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\Common\DBConnection.cs" />
-    <Compile Include="Interfaces\DocumentContext.cs" />
+    <Compile Include="Classes\DocumentContext.cs" />
     <Compile Include="Interfaces\IDocumentcs.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

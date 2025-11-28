@@ -9,7 +9,7 @@ namespace Documents_Toshmatov.Classes.Common
 {
     public class DBConnect
     {
-        public static readonly string Path = @"C:\Users\aooshchepkov\Desktop\Pup.accdb";
+        public static readonly string Path = @"E:\Documents_Toshmatovv\Database.accdb";
 
         public static OleDbConnection Connection()
         {
