@@ -8,27 +8,29 @@ namespace Documents_Toshmatov
     public partial class MainWindow : Window
     {
         public static MainWindow init;
-        public List<DocumentContext> AllDocuments { get; set; }
+
+        public List<DocumentContext> AllDocuments = new DocumentContext().AllDocuments();
+        public enum pages
+        {
+            main, 
+            add   
+        }
 
         public MainWindow()
         {
             InitializeComponent();
             init = this;
-            // Загружаем документы при запуске
-            AllDocuments = new DocumentContext().AllDocuments();
-            OpenPages("main");
+            OpenPages(pages.main); 
         }
 
-        public void OpenPages(string page)
+        public void OpenPages(pages _pages)
         {
-            switch (page)
+            if (_pages == pages.main) 
+                frame.Navigate(new Main()); 
+            else if (_pages == pages.add) 
             {
-                case "main":
-                    frame.Navigate(new Main());
-                    break;
-                case "add":
-                    // frame.Navigate(new Add());
-                    break;
+                MessageBox.Show("Страница добавления пока не реализована");
+                // frame.Navigate(new Add());
             }
         }
     }

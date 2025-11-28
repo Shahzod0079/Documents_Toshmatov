@@ -18,7 +18,7 @@ namespace Documents_Toshmatov.Classes.Common
             oleDbConnection.Open();
             return oleDbConnection;
         }
->
+
         public static OleDbDataReader Query(string Query, OleDbConnection Connection)
         {
             return new OleDbCommand(Query, Connection).ExecuteReader();

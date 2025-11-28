@@ -9,38 +9,31 @@ namespace Documents_Toshmatov.Pages
         public Main()
         {
             InitializeComponent();
-            LoadDocuments();
+            CreatedUI();
         }
 
-        /// <summary> Загрузка документов </summary>
-        private void LoadDocuments()
-        {
-            // TODO: Загрузить документы из базы данных и добавить в parent
-            // Пример:
-            // var documents = new DocumentContext().AllDocuments();
-            // foreach (var doc in documents)
-            // {
-            //     parent.Children.Add(new Elements.Item(doc));
-            // }
-        }
-
+        /// <summary> Добавление записи </summary>
         private void AddDocuments_Click(object sender, RoutedEventArgs e)
         {
             if (Application.Current.MainWindow is MainWindow mainWindow)
             {
-                mainWindow.OpenPages("add");
+                mainWindow.OpenPages(MainWindow.pages.add);
             }
         }
 
+        /// <summary> Функция закрытия приложения </summary>
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-
             Application.Current.Shutdown();
         }
+
+        /// <summary> Выводим элементы в интерфейс пользователя </summary>
         public void CreatedUI()
         {
             parent.Children.Clear();
 
+            if (MainWindow.init?.AllDocuments != null)
+            {
                 foreach (DocumentContext document in MainWindow.init.AllDocuments)
                 {
                     parent.Children.Add(new Elements.Item(document));
@@ -48,3 +41,4 @@ namespace Documents_Toshmatov.Pages
             }
         }
     }
+}
